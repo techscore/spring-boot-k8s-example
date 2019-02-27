@@ -1,6 +1,6 @@
 package exampleapi
 
-import dataapi.beans
+import exampleapi.beans
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
