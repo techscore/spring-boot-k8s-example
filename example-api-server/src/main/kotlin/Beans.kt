@@ -1,4 +1,4 @@
-package dataapi
+package exampleapi
 
 import exampleapi.hello.HelloHandler
 import org.springframework.context.support.beans
