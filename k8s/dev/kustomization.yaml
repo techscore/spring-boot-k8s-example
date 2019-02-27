@@ -1,0 +1,11 @@
+bases:
+- ../base
+commonAnnotations:
+  stage: dev
+patches:
+- deployment.example-api.patch.yaml
+configMapGenerator:
+- files:
+  - application-dev.yaml
+  name: example-api-configmap
+

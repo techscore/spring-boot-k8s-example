@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: example-api 
+  labels:
+    application: example-api
+spec:
+  selector:
+    matchLabels:
+      application: example-api
+  template:
+    metadata:
+      labels:
+        application: example-api
+      annotations:
+        prometheus.io/path: "/actuator/prometheus"
+        prometheus.io/port: "8081"
+        prometheus.io/scheme: "http"
+        prometheus.io/scrape: "true"
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - example-api
+              topologyKey: kubernetes.io/hostname
+      containers:
+        - name: example-api
+          ports:
+            - containerPort: 8080
+              name: http
+              protocol: TCP
+            - containerPort: 8081
+              name: http-actuator
+              protocol: TCP
+          workingDir: /app
+          volumeMounts:
+            - name: config
+              mountPath: /app/config
+          livenessProbe:
+            httpGet:
+              path: /actuator/info
+              port: 8081
+            initialDelaySeconds: 10 
+            periodSeconds: 30
+            timeoutSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8081
+            initialDelaySeconds: 10
+            periodSeconds: 20
+            timeoutSeconds: 5
+          env:
+            - name: spring.profiles.active 
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.annotations['stage']
+            - name: TZ
+              value: Asia/Tokyo
+            - name: LANG
+              value: ja_JP.utf8
+      volumes:
+        - name: "config"
+          configMap:
+            name: "example-api-configmap"
+

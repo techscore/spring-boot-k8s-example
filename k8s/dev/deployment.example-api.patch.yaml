@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: example-api
+spec:
+  replicas: 1
+  template:
+    spec:
+      containers:
+        - name: example-api
+          image: example-api-server:0.0.0-SNAPSHOT
+          imagePullPolicy: Never
+          resources:
+            limits:
+              memory: 1Gi
+            requests:
+              memory: 128Mi
+          env:
+            - name: JAVA_TOOL_OPTIONS
+              value: "-Xmx512m -XX:MaxMetaspaceSize=128m -XX:ReservedCodeCacheSize=128m -XX:+UseG1GC -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/var/log/app/ -XX:ErrorFile=/var/log/app/"
+
+

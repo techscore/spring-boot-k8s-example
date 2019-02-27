@@ -1,0 +1,48 @@
+plugins {
+    id 'org.springframework.boot' version '2.1.3.RELEASE' apply false
+    id 'org.jetbrains.kotlin.jvm' version '1.3.21' apply false
+    id 'org.jetbrains.kotlin.plugin.allopen' version '1.3.21' apply false
+    id 'com.google.cloud.tools.jib' version '1.0.0' apply false
+}
+
+allprojects {
+    group = 'myproj.example.com'
+    version = '0.0.0-SNAPSHOT'
+}
+
+subprojects {
+    apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'kotlin'
+    apply plugin: 'eclipse'
+    apply plugin: 'idea'
+
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+
+    compileKotlin {
+        kotlinOptions {
+            jvmTarget = JavaVersion.VERSION_1_8
+            apiVersion = '1.3'
+            languageVersion = '1.3'
+        }
+    }
+
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+
+    dependencyManagement {
+        imports {
+            mavenBom org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES
+            mavenBom 'org.springframework.cloud:spring-cloud-dependencies:Greenwich.RELEASE'
+        }
+
+        dependencies {
+            dependency 'org.jetbrains.kotlin:kotlin-stdlib-jre8:1.3.21'
+            dependency 'org.jetbrains.kotlin:kotlin-reflect:1.3.21'
+            dependency 'io.github.microutils:kotlin-logging:1.6.10'
+            dependency 'org.webjars:swagger-ui:3.20.5'
+        }
+    }
+}

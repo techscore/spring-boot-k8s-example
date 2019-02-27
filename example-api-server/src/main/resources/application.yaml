@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: example-api
+management:
+  server:
+    port: 8081
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+server:
+  compression:
+    enabled: true
