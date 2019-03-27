@@ -14,10 +14,14 @@
 
     ./gradlew example-api-server:jibDockerBuild
     
-    kustomize build k8s/dev | kubectl apply -f -
+    # manifestの確認
+    kubectl kustomize k8s/dev
+    
+    # apply
+    kubectl apply -k k8s/dev
     
     # cleanup
-    kustomize build k8s/dev | kubectl delete -f -
+    kubectl delete -k k8s/dev
 
 
 
